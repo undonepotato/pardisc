@@ -31,11 +31,11 @@ intents = discord.Intents(
     typing=False,
     message_content=False,
     guild_scheduled_events=False,
-    auto_moderation=False
+    auto_moderation=False,
 )
 
-TEST_GUILD = discord.Object(id=1025955772636594206)
-MY_BOT_ID  = 1067220252594798595
+TEST_GUILD = discord.Object(id=824481238219620372)
+MY_BOT_ID = 1067220252594798595
 extensions = ["debug", "admin", "help", "paranoia"]
 
 

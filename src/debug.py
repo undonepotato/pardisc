@@ -59,6 +59,17 @@ class DebugCommands(commands.Cog):
 
         await ctx.send("Command finished execution")
 
+    @commands.command(name="dm_user")
+    @commands.dm_only()
+    @commands.is_owner()
+    async def dm_user(self, ctx: commands.Context, uid: int) -> None:
+        try:
+            await self.bot.get_user(uid).send("Testing!")
+        except AttributeError:
+            await ctx.send("Error: AttributeError: this might be you!")
+        except discord.HTTPException:
+            await ctx.send("Sending the message failed! (discord.HTTPException)")
+
 
 async def setup(bot: commands.Bot) -> None:
     await bot.add_cog(DebugCommands(bot))
