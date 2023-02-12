@@ -284,10 +284,15 @@ class ParanoiaStartCoinFlipView(discord.ui.View):
     async def paranoia_start_coin_flip_button(
         self, interaction: discord.Interaction, button: discord.ui.Button
     ) -> None:
+
         coin_is_heads = random.choice([True, False])
 
+        button.disabled = True
+        button.style = discord.ButtonStyle.gray
+        await interaction.response.edit_message(view=self)
+
         if coin_is_heads == True and self.calling_mode:
-            await interaction.response.send_message(
+            await interaction.followup.send(
                 f"Heads.. <@{self.participants[self.participants.index(self.asker)].id}>, what was the question? (Say in the call!)",
                 view=ParanoiaConfirmQuestionRevealedView(
                     self.participants, self.calling_mode, self.asker, self.askee
@@ -295,7 +300,7 @@ class ParanoiaStartCoinFlipView(discord.ui.View):
             )
 
         elif coin_is_heads == True and not self.calling_mode:
-            await interaction.response.send_message(
+            await interaction.followup.send(
                 f"Heads.. <@{self.participants[self.participants.index(self.asker)].id}>, what was the question? (Send in this channel!)",
                 view=ParanoiaConfirmQuestionRevealedView(
                     self.participants, self.calling_mode, self.asker, self.askee
@@ -303,7 +308,7 @@ class ParanoiaStartCoinFlipView(discord.ui.View):
             )
 
         elif (coin_is_heads == False) and (self.askee != self.participants[-1]):
-            await interaction.response.send_message(
+            await interaction.followup.send(
                 "Tails.. No one will ever know what the question was.",
                 view=ParanoiaConfirmQuestionNotRevealedView(
                     self.participants, self.calling_mode, self.asker, self.askee
@@ -336,20 +341,29 @@ class ParanoiaConfirmQuestionRevealedView(discord.ui.View):
     async def paranoia_confirm_question_revealed_button(
         self, interaction: discord.Interaction, button: discord.ui.Button
     ) -> None:
-        if self.askee != self.participants[-1]:
-            await interaction.response.send_message(
-                "When you're ready for the next round :arrow_down:",
-                view=ParanoiaStartNextSegmentView(
-                    self.participants,
-                    self.calling_mode,
-                    self.participants[self.participants.index(self.asker) + 1],
-                    self.participants[self.participants.index(self.askee) + 1],
-                ),
-            )
+
+        if interaction.user != self.askee or interaction.user != self.asker:
+            return await interaction.response.send_message("You're not the asker or the responder!", ephemeral=True)
+
         else:
-            await interaction.response.send_message(
-                "That's the last round! To play again, do /paranoia start."
-            )
+            button.disabled = True
+            button.style = discord.ButtonStyle.gray
+            await interaction.response.edit_message(view=self)
+
+            if self.askee != self.participants[-1]:
+                await interaction.followup.send(
+                    "When you're ready for the next round :arrow_down:",
+                    view=ParanoiaStartNextSegmentView(
+                        self.participants,
+                        self.calling_mode,
+                        self.participants[self.participants.index(self.asker) + 1],
+                        self.participants[self.participants.index(self.askee) + 1],
+                    ),
+                )
+            else:
+                await interaction.followup.send(
+                    "That's the last round! To play again, do /paranoia start."
+                )
 
 
 class ParanoiaConfirmQuestionNotRevealedView(discord.ui.View):
@@ -376,20 +390,28 @@ class ParanoiaConfirmQuestionNotRevealedView(discord.ui.View):
     async def paranoia_confirm_question_revealed_button(
         self, interaction: discord.Interaction, button: discord.ui.Button
     ) -> None:
-        if self.askee != self.participants[-1]:
-            await interaction.response.send_message(
-                "When you're ready for the next round :arrow_down:",
-                view=ParanoiaStartNextSegmentView(
-                    self.participants,
-                    self.calling_mode,
-                    self.participants[self.participants.index(self.asker) + 1],
-                    self.participants[self.participants.index(self.askee) + 1],
-                ),
-            )
+        if interaction.user != self.askee or interaction.user != self.asker:
+            return await interaction.response.send_message("You're not the asker or the responder!", ephemeral=True)
+            
         else:
-            await interaction.response.send_message(
-                "That's the last round! To play again, do /paranoia start."
-            )
+            button.disabled = True
+            button.style = discord.ButtonStyle.gray
+            await interaction.response.edit_message(view=self)
+
+            if self.askee != self.participants[-1]:
+                await interaction.followup.send(
+                    "When you're ready for the next round :arrow_down:",
+                    view=ParanoiaStartNextSegmentView(
+                        self.participants,
+                        self.calling_mode,
+                        self.participants[self.participants.index(self.asker) + 1],
+                        self.participants[self.participants.index(self.askee) + 1],
+                    ),
+                )
+            else:
+                await interaction.followup.send(
+                    "That's the last round! To play again, do /paranoia start."
+                )
 
 
 async def setup(bot: commands.Bot) -> None:
