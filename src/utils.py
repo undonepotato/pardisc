@@ -1,11 +1,15 @@
-import discord
+"""
+Singletons, such as the bot ID, and setup functions, such as loading extensions.
+"""
+
 import os
 import logging
+import discord
 from dotenv import load_dotenv
 from rich.logging import RichHandler
 from colorama import just_fix_windows_console
 from discord.ext import commands
-from discord import app_commands
+
 
 # Environment variables
 load_dotenv()
@@ -40,6 +44,9 @@ extensions = ["debug", "admin", "help", "paranoia"]
 
 
 class Pardisc(commands.Bot):
+    """
+    `commands.Bot`, except it loads extensions in `setup_hook`.
+    """
     async def setup_hook(self) -> None:
         for extension in extensions:
             await self.load_extension(extension)
