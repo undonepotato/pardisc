@@ -104,8 +104,8 @@ class Paranoia(commands.GroupCog):
             if participant not in able_to_see:
                 return await interaction.followup.send(
                     f"{participant.display_name} doesn't seem "
-                    "to be able to see this channel. Make sure all participants can see this channel, "
-                    "or move to a different one."
+                    "to be able to see this channel. Make sure all participants can see this "
+                    "channel, or move to a different one."
                 )
 
             if participant in seen_participants:
@@ -369,7 +369,7 @@ class ParanoiaConfirmQuestionRevealedView(discord.ui.View):
         self, interaction: discord.Interaction, button: discord.ui.Button
     ) -> None:
 
-        if interaction.user == self.askee:
+        if interaction.user == self.asker:
             button.disabled = True
             button.style = discord.ButtonStyle.gray
             await interaction.response.edit_message(view=self)
@@ -391,7 +391,7 @@ class ParanoiaConfirmQuestionRevealedView(discord.ui.View):
                 )
         else:
             return await interaction.response.send_message(
-                "You're not the responder!", ephemeral=True
+                "You're not the asker!", ephemeral=True
             )
 
 
