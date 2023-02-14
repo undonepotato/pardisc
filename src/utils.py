@@ -38,7 +38,7 @@ intents = discord.Intents(
     auto_moderation=False,
 )
 
-TEST_GUILD = discord.Object(id=824481238219620372)
+TEST_GUILD = discord.Object(id=1074513568923394108)
 MY_BOT_ID = 1067220252594798595
 extensions = ["debug", "admin", "help", "paranoia"]
 
