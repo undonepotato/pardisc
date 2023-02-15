@@ -38,8 +38,9 @@ intents = discord.Intents(
     auto_moderation=False,
 )
 
-TEST_GUILD = discord.Object(id=1074513568923394108)
-MY_BOT_ID = 1067220252594798595
+TEST_GUILD = discord.Object(id=int(os.getenv("TEST_GUILD")))
+MY_BOT_ID = int(os.getenv("BOT_ID"))
+
 extensions = ["debug", "admin", "help", "paranoia"]
 
 

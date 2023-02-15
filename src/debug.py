@@ -25,7 +25,7 @@ class DebugCommands(commands.Cog):
         try:
             ctx.bot.tree.copy_global_to(guild=TEST_GUILD)
             await ctx.bot.tree.sync(guild=TEST_GUILD)
-            await ctx.send("Synced commands globally and to guild %s", TEST_GUILD.id)
+            await ctx.send(f"Synced commands globally and to guild {TEST_GUILD.id}")
             logging.info("Successful manual sync to Discord")
 
         except discord.HTTPException:
