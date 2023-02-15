@@ -1,5 +1,9 @@
-import discord
+"""
+Houses the bot development and debugging commands.
+"""
+
 import logging
+import discord
 from discord.ext import commands
 
 
@@ -7,6 +11,9 @@ from utils import TEST_GUILD, extensions
 
 
 class DebugCommands(commands.Cog):
+    """
+    Debugging commands for bot development.
+    """
     def __init__(self, bot: commands.Bot):
         self.bot = bot
         super().__init__()
@@ -18,11 +25,11 @@ class DebugCommands(commands.Cog):
         try:
             ctx.bot.tree.copy_global_to(guild=TEST_GUILD)
             await ctx.bot.tree.sync(guild=TEST_GUILD)
-            await ctx.send(f"Synced commands globally and to guild {TEST_GUILD.id}")
+            await ctx.send("Synced commands globally and to guild %s", TEST_GUILD.id)
             logging.info("Successful manual sync to Discord")
 
         except discord.HTTPException:
-            logging.error(f"HTTPException while manually syncing commands")
+            logging.error("HTTPException while manually syncing commands")
 
     @commands.command(name="reload")
     @commands.dm_only()
@@ -44,12 +51,12 @@ class DebugCommands(commands.Cog):
                 try:
                     await ctx.bot.reload_extension(arg)
                     await ctx.send(f"Extension {arg} successfully reloaded")
-                    logging.info(f"Extension {arg} manually reloaded")
+                    logging.info("Extension %s manually reloaded", arg)
 
                 except commands.ExtensionNotLoaded:
                     await ctx.send(f"Extension {arg} was never loaded!")
                     logging.error(
-                        f"Existing extension {arg} was never loaded and thus could not be reloaded"
+                        "Existing extension %s was never loaded and thus could not be reloaded", arg
                     )
                     break
 

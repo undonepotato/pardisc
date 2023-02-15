@@ -9,6 +9,9 @@ from discord.ext import commands
 
 @commands.guild_only()
 class HelpCog(commands.Cog, name="Help Commands"):
+    """
+    General help commands.
+    """
     def __init__(self, bot: commands.Bot) -> None:
         self.bot = bot
         super().__init__()
