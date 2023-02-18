@@ -12,7 +12,7 @@ class BotAdmin(commands.Cog):
     Global administration commands for the bot. These are all owner-only and DM-only.
     """
 
-    def __init__(self, bot: commands.Bot):
+    def __init__(self, bot: commands.Bot) -> None:
         self.bot = bot
         super().__init__()
 
@@ -39,7 +39,7 @@ class BotAdmin(commands.Cog):
         status: typing.Literal["online", "idle", "dnd", "invisible"],
         activity_type: typing.Optional[typing.Literal["game", "custom"]],
         activity_text: typing.Optional[str],
-    ):
+    ) -> None:
 
         status_to_change_to = None
         activity = None
