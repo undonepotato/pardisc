@@ -315,7 +315,7 @@ class ParanoiaStartCoinFlipView(discord.ui.View):
                 "You're not the question responder!", ephemeral=True
             )
 
-        coin_is_heads = random.choice([True, False])
+        coin_is_heads = random.choice([True, False]) # nosec B311
 
         button.disabled = True
         button.style = discord.ButtonStyle.gray
