@@ -48,6 +48,7 @@ class Pardisc(commands.Bot):
     """
     `commands.Bot`, except it loads extensions in `setup_hook`.
     """
+
     async def setup_hook(self) -> None:
         for extension in extensions:
             await self.load_extension(extension)

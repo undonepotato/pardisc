@@ -92,11 +92,9 @@ class Paranoia(commands.GroupCog):
             participant8,
         ]
 
-        participants = [
-            participant for participant in raw_participants if participant is not None
-        ]
+        participants = [participant for participant in raw_participants if participant is not None]
 
-        calling_mode = True if text_calling_mode == "Yes" else False
+        calling_mode = text_calling_mode == "Yes"
         able_to_see = interaction.channel.members
         seen_participants = set()
 
@@ -199,9 +197,7 @@ class ParanoiaStartNextSegmentView(discord.ui.View):
         )
         button.disabled = True
         button.style = discord.ButtonStyle.gray
-        await interaction.followup.edit_message(
-            message_id=interaction.message.id, view=self
-        )
+        await interaction.followup.edit_message(message_id=interaction.message.id, view=self)
 
 
 class ParanoiaConfirmQuestionSentView(discord.ui.View):
@@ -315,7 +311,7 @@ class ParanoiaStartCoinFlipView(discord.ui.View):
                 "You're not the question responder!", ephemeral=True
             )
 
-        coin_is_heads = random.choice([True, False]) # nosec B311
+        coin_is_heads = random.choice([True, False])  # nosec B311
 
         button.disabled = True
         button.style = discord.ButtonStyle.gray
@@ -390,9 +386,7 @@ class ParanoiaConfirmQuestionRevealedView(discord.ui.View):
                     "That's the last round! To play again, do /paranoia start."
                 )
         else:
-            return await interaction.response.send_message(
-                "You're not the asker!", ephemeral=True
-            )
+            return await interaction.response.send_message("You're not the asker!", ephemeral=True)
 
 
 class ParanoiaConfirmQuestionNotRevealedView(discord.ui.View):
@@ -446,6 +440,7 @@ class ParanoiaConfirmQuestionNotRevealedView(discord.ui.View):
             return await interaction.response.send_message(
                 "You're not the responder!", ephemeral=True
             )
+
 
 async def setup(bot: commands.Bot) -> None:
     await bot.add_cog(Paranoia(bot))
