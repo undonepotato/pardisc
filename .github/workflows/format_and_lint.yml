@@ -37,5 +37,5 @@ jobs:
       run: echo $(pylint $(git diff --name-only HEAD~1 HEAD src/) --errors-only) >> $PYLINT_ERRORS
       
     - name: Exit if errors detected
-      if: env.PYLINT_ERRORS != nil
+      if: env.PYLINT_ERRORS != null
       run: exit 1
