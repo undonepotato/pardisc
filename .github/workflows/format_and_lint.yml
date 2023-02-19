@@ -42,5 +42,5 @@ jobs:
     - uses: peter-evans/commit-comment@v2.0.1
       with:
         body: |
-          $ {{ env.PYLINT_OUTPUT }}
-          - Will remove this later; this is a test comment for this Action
+          # Pylint Output
+          ${{ env.PYLINT_OUTPUT }}
