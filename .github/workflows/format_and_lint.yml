@@ -16,9 +16,10 @@ jobs:
       run: python -m pip install black
       
     - name: Format with black
-      run: black src/ --line-length 100 # Formats only changed files
+      run: black src/ --line-length 100
     
   pylint:
+    permissions: write-all # Temporary test to see if this is what's causing pylint to fail
     runs-on: ubuntu-latest
     env:
       PYLINT_OUTPUT: 'If you''re seeing this, the action probably didn''t run correctly.'
