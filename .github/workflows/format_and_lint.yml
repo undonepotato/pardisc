@@ -16,7 +16,7 @@ jobs:
       run: python -m pip install black
       
     - name: Format with black
-      run: black $(git diff --name-only HEAD~1 HEAD src/) --line-length 100 # Formats only changed files in src/
+      run: black $(git diff --name-only HEAD~1 HEAD) --line-length 100 # Formats only changed files
     
   pylint:
     runs-on: ubuntu-latest
@@ -34,7 +34,7 @@ jobs:
       run: python -m pip install black
     
     - name: Lint with pylint
-      run: echo $(pylint $(git diff --name-only HEAD~1 HEAD src/) --errors-only) >> $PYLINT_ERRORS
+      run: echo $(pylint $(git diff --name-only HEAD~1 HEAD) --errors-only) >> $PYLINT_ERRORS
       
     - name: Exit if errors detected
       if: env.PYLINT_ERRORS != null
