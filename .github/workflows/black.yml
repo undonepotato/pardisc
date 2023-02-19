@@ -10,4 +10,4 @@ jobs:
       with:
         python-version: 3.11.1
     - run: python -m pip install black
-    - run: black --line-length 100
+    - run: black src/ --line-length 100
