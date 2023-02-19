@@ -7,7 +7,6 @@ jobs:
       packages: read
       contents: write
     runs-on: ubuntu-latest
-    continue-on-error: true
     steps:
     - name: Checkout repository
       uses: actions/checkout@v3.3.0
@@ -24,6 +23,7 @@ jobs:
       run: BLACK_OUTPUT=$(black src/ --check --line-length 100)
     
     - name: Comment with output
+      if: always()
       uses: peter-evans/commit-comment@v2.0.1
       with:
         body: |
@@ -35,7 +35,6 @@ jobs:
       packages: read
       contents: write
     runs-on: ubuntu-latest
-    continue-on-error: true
     steps:
     - name: Checkout repository
       uses: actions/checkout@v3.3.0
@@ -52,6 +51,7 @@ jobs:
       run: PYLINT_OUTPUT=$(pylint src/)
     
     - name: Comment with output
+      if: always()
       uses: peter-evans/commit-comment@v2.0.1
       with:
         body: |
