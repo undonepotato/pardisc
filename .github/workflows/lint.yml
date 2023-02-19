@@ -1,0 +1,43 @@
+name: lint
+run-name: Linting commit ${{ github.sha }}
+on: [push, workflow_dispatch]
+jobs:
+  lint:
+    permissions:
+      packages: read
+      contents: write
+    env:
+      BLACK_OUTPUT: 'If you''re seeing this, the action probably didn''t run correctly. (Black)'
+      PYLINT_OUTPUT: 'If you''re seeing this, the action probably didn''t run correctly. (Pylint)'
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v3.3.0
+    
+    - name: Setup CPython
+      uses: actions/setup-python@v4.5.0
+      with:
+        python-version: 3.11.1
+        
+    - name: Install black
+      run: python -m pip install black
+      
+    - name: Format with black
+      run: echo $(black src/ --check --line-length 100) >> ${{ env.BLACK_OUTPUT }}
+    
+    - name: Install pylint
+      run: python -m pip install pylint
+    
+    - name: Lint with pylint
+      run: echo $(pylint src/) >> ${{ env.PYLINT_OUTPUT }}
+    
+    - name: Comment with output
+      uses: peter-evans/commit-comment@v2.0.1
+      with:
+        body: |
+          # Black Output
+          ${{ env.BLACK_OUTPUT }}
+          
+          ---
+          # Pylint Output
+          ${{ env.PYLINT_OUTPUT }}
