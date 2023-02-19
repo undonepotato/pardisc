@@ -7,6 +7,7 @@ jobs:
       packages: read
       contents: write
     runs-on: ubuntu-latest
+    continue-on-error: true
     steps:
     - name: Checkout repository
       uses: actions/checkout@v3.3.0
@@ -34,6 +35,7 @@ jobs:
       packages: read
       contents: write
     runs-on: ubuntu-latest
+    continue-on-error: true
     steps:
     - name: Checkout repository
       uses: actions/checkout@v3.3.0
