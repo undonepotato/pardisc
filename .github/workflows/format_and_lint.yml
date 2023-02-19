@@ -1,0 +1,41 @@
+name: format-and-lint
+run-name: Formatting and linting commit ${{ github.sha }}
+on: [push, workflow_dispatch]
+jobs:
+  black:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v3.3.0
+    
+    - name: Setup Python
+      uses: actions/setup-python@v4.5.0
+      with:
+        python-version: 3.11.1
+        
+    - name: Install black
+      run: python -m pip install black
+      
+    - name: Format with black
+      run: black $(git diff --name-only HEAD~1 HEAD src/) --line-length 100 # Formats only changed files in src/
+    
+  pylint:
+    runs-on: ubuntu-latest
+    env:
+        PYLINT_ERRORS: there are errors (this is a placeholder, this will detect errors since it is not empty)
+    steps:
+    - uses: actions/checkout@v3.3.0
+    
+    - name: Setup Python
+      uses: actions/setup-python@v4.5.0
+      with:
+        python-version: 3.11.1
+      
+    - name: Install pylint
+      run: python -m pip install black
+    
+    - name: Lint with pylint
+      run: echo $(pylint $(git diff --name-only HEAD~1 HEAD src/) --errors-only) >> $PYLINT_ERRORS
+      
+    - name: Exit if errors detected
+      if: $PYLINT_ERRORS != ""
+      run: exit 1
