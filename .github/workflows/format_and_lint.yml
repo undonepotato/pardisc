@@ -36,7 +36,7 @@ jobs:
     - name: Lint with pylint
       run: |
         cd src/
-        echo $(pylint $(git diff --name-only HEAD~1 HEAD) --errors-only) >> $PYLINT_ERRORS
+        echo $(pylint $(git diff ${{ github.sha }}^ ${{ github.sha }} --name-onlu) --errors-only) >> $PYLINT_ERRORS
       
     - name: Exit if errors detected
       if: env.PYLINT_ERRORS != null
