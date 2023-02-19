@@ -19,7 +19,8 @@ jobs:
       run: black src/ --line-length 100
     
   pylint:
-    permissions: write-all # Temporary test to see if this is what's causing pylint to fail
+    permissions:
+      actions: write
     runs-on: ubuntu-latest
     env:
       PYLINT_OUTPUT: 'If you''re seeing this, the action probably didn''t run correctly.'
@@ -40,5 +41,5 @@ jobs:
     - uses: peter-evans/commit-comment@v2.0.1
       with:
         body: |
-          $PYLINT_OUTPUT
+          $ {{ env.PYLINT_OUTPUT }}
           - Will remove this later; this is a test comment for this Action
