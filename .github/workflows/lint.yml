@@ -7,6 +7,8 @@ jobs:
       packages: read
       contents: write
     runs-on: ubuntu-latest
+    env:
+      BLACK_OUTPUT: 'If you''re seeing this, the action probably didn''t run correctly.'
     steps:
     - name: Checkout repository
       uses: actions/checkout@v3.3.0
@@ -20,7 +22,7 @@ jobs:
       run: python -m pip install black
       
     - name: Format with black
-      run: BLACK_OUTPUT=$(black src/ --check --line-length 100)
+      run: echo BLACK_OUTPUT=$(black src/ --check --line-length 100) >> $BLACK_OUTPUT
     
     - name: Comment with output
       if: always()
@@ -35,6 +37,8 @@ jobs:
       packages: read
       contents: write
     runs-on: ubuntu-latest
+    env:
+      PYLINT_OUTPUT: 'If you''re seeing this, the action probably didn''t run correctly.'
     steps:
     - name: Checkout repository
       uses: actions/checkout@v3.3.0
@@ -48,7 +52,7 @@ jobs:
       run: python -m pip install pylint
     
     - name: Lint with pylint
-      run: PYLINT_OUTPUT=$(pylint src/)
+      run: echo PYLINT_OUTPUT=$(pylint src/) >> $PYLINT_OUTPUT
     
     - name: Comment with output
       if: always()
