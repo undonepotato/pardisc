@@ -30,7 +30,7 @@ jobs:
       with:
         body: |
           # Black Output
-          $BLACK_OUTPUT
+          ${{ env.BLACK_OUTPUT }}
           
   pylint:
     permissions:
@@ -60,4 +60,4 @@ jobs:
       with:
         body: |
           # Pylint Output
-          $PYLINT_OUTPUT
+          ${{ env.PYLINT_OUTPUT }}
