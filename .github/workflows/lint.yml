@@ -1,0 +1,95 @@
+name: lint
+run-name: Linting commit ${{ github.sha }}
+on: [push, workflow_dispatch]
+jobs:
+  black:
+    permissions:
+      packages: read
+      contents: write
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v3.3.0
+    
+    - name: Setup CPython
+      uses: actions/setup-python@v4.5.0
+      with:
+        python-version: 3.11.1
+        
+    - name: Install black and dependencies
+      run: |
+        python -m pip install -r requirements.txt
+        python -m pip install black
+      
+    - name: Format with black
+      run: echo BLACK_OUTPUT=$(black src/ --check --line-length 100) >> $GITHUB_ENV
+    
+    - name: Comment with output
+      uses: peter-evans/commit-comment@v2.0.1
+      with:
+        body: |
+          # Black Output
+          ```
+          ${{ env.BLACK_OUTPUT }}
+          ```
+          
+  pylint:
+    permissions:
+      packages: read
+      contents: write
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v3.3.0
+    
+    - name: Setup CPython
+      uses: actions/setup-python@v4.5.0
+      with:
+        python-version: 3.11.1
+    
+    - name: Install pylint
+      run: |
+        python -m pip install -r requirements.txt
+        python -m pip install pylint
+    
+    - name: Lint with pylint
+      run: echo PYLINT_OUTPUT=$(pylint src/) >> $GITHUB_ENV
+    
+    - name: Comment with output
+      uses: peter-evans/commit-comment@v2.0.1
+      with:
+        body: |
+          # Pylint Output
+          ```
+          ${{ env.PYLINT_OUTPUT }}
+          ```
+  bandit:
+    permissions:
+      packages: read
+      contents: write
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v3.3.0
+    
+    - name: Setup CPython
+      uses: actions/setup-python@v4.5.0
+      with:
+        python-version: 3.11.1
+    
+    - name: Install bandit
+      run: |
+        python -m pip install -r requirements.txt
+        python -m pip install bandit
+    
+    - name: Lint security with bandit
+      run: echo BANDIT_OUTPUT=$(bandit src/) >> $GITHUB_ENV
+    
+    - name: Comment with output
+      uses: peter-evans/commit-comment@v2.0.1
+      with:
+        body: |
+          # Bandit Output
+          ```
+          ${{ env.BANDIT_OUTPUT }}
+          ```
