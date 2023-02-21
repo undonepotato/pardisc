@@ -92,7 +92,9 @@ class Paranoia(commands.GroupCog):
             participant8,
         ]
 
-        participants = [participant for participant in raw_participants if participant is not None]
+        participants = [
+            participant for participant in raw_participants if participant is not None
+        ]
 
         calling_mode = text_calling_mode == "Yes"
         able_to_see = interaction.channel.members
@@ -197,7 +199,9 @@ class ParanoiaStartNextSegmentView(discord.ui.View):
         )
         button.disabled = True
         button.style = discord.ButtonStyle.gray
-        await interaction.followup.edit_message(message_id=interaction.message.id, view=self)
+        await interaction.followup.edit_message(
+            message_id=interaction.message.id, view=self
+        )
 
 
 class ParanoiaConfirmQuestionSentView(discord.ui.View):
@@ -383,10 +387,17 @@ class ParanoiaConfirmQuestionRevealedView(discord.ui.View):
                 )
             else:
                 await interaction.followup.send(
-                    "That's the last round! To play again, do /paranoia start."
+                    "That's the last round! To play again, do /paranoia start. "
+                    "To rotate the player list (have the last person be the first person "
+                    "in the new round), click the button!",
+                    view=ParanoiaRotateParticipantListAndStartNewGameView(
+                        self.participants, self.calling_mode, self.askee
+                    ),
                 )
         else:
-            return await interaction.response.send_message("You're not the asker!", ephemeral=True)
+            return await interaction.response.send_message(
+                "You're not the asker!", ephemeral=True
+            )
 
 
 class ParanoiaConfirmQuestionNotRevealedView(discord.ui.View):
@@ -433,8 +444,92 @@ class ParanoiaConfirmQuestionNotRevealedView(discord.ui.View):
                 )
             else:
                 await interaction.followup.send(
-                    "That's the last round! To play again, do /paranoia start."
+                    "That's the last round! To play again, do /paranoia start. "
+                    "To rotate the player list (have the last person be the first person "
+                    "in the new round), click the button!",
+                    view=ParanoiaRotateParticipantListAndStartNewGameView(
+                        self.participants, self.calling_mode, self.askee
+                    ),
                 )
+
+        else:
+            return await interaction.response.send_message(
+                "You're not the responder!", ephemeral=True
+            )
+
+
+class ParanoiaRotateParticipantListAndStartNewGameView(discord.ui.View):
+    """
+    A button inside this view to:
+    1. Rotate the participant list so that the last person is first, first person is second.
+    2. Start a new game. Streamlined version of the `paranoia_start` command.
+    """
+
+    def __init__(
+        self, participants: list, calling_mode: bool, askee: discord.Member
+    ) -> None:
+        self.participants = participants
+        self.calling_mode = calling_mode
+        self.askee = askee
+        super().__init__()
+
+    @discord.ui.button(label="Rotate Players", style=discord.ButtonStyle.green)
+    async def paranoia_rotate_participant_list_and_start_new_game(
+        self, interaction: discord.Interaction, button: discord.ui.Button
+    ) -> None:
+
+        if interaction.user == self.askee:
+            button.disabled = True
+            button.style = discord.ButtonStyle.gray
+            await interaction.response.edit_message(view=self)
+
+            self.participants.insert(0, self.participants[-1])
+            self.participants.pop(-1)
+
+            order_embed = discord.Embed(
+                title="Rotated Order", color=discord.Color.blurple()
+            )
+            order_embed.description = (
+                f"""
+            Here's the new order! If you don't like it, cry about it (or redo this command).
+            If you're satisfied, you can go ahead and click the button to continue.
+
+            1. <@{self.participants[0].id}>
+            2. <@{self.participants[1].id}>
+            3. <@{self.participants[2].id}>
+            4. <@{self.participants[3].id}>
+            """
+                + (
+                    f"5. <@{self.participants[4].id}>\n"
+                    if 4 < len(self.participants)
+                    else ""
+                )
+                + (
+                    f"6. <@{self.participants[5].id}>\n"
+                    if 5 < len(self.participants)
+                    else ""
+                )
+                + (
+                    f"7. <@{self.participants[6].id}>\n"
+                    if 6 < len(self.participants)
+                    else ""
+                )
+                + (
+                    f"8. <@{self.participants[7].id}>\n"
+                    if 7 < len(self.participants)
+                    else ""
+                )
+            )
+            await interaction.followup.send(
+                embed=order_embed,
+                view=ParanoiaStartNextSegmentView(
+                    self.participants,
+                    self.calling_mode,
+                    self.participants[0],
+                    self.participants[1],
+                    interaction.user,
+                ),
+            )
 
         else:
             return await interaction.response.send_message(
