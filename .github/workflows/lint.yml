@@ -83,7 +83,7 @@ jobs:
         python -m pip install bandit
     
     - name: Lint security with bandit
-      run: echo BANDIT_OUTPUT=$(bandit src/) >> $GITHUB_ENV
+      run: echo BANDIT_OUTPUT=$(bandit -r src/) >> $GITHUB_ENV
     
     - name: Comment with output
       uses: peter-evans/commit-comment@v2.0.1
