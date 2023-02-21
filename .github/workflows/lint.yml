@@ -53,7 +53,7 @@ jobs:
         python -m pip install pylint
     
     - name: Lint with pylint
-      run: echo PYLINT_OUTPUT=$(pylint src/ --disable C0116 R0913 R0914) >> $GITHUB_ENV
+      run: echo PYLINT_OUTPUT=$(pylint --disable C0116 R0913 R0914 src/) >> $GITHUB_ENV
     
     - name: Comment with output
       uses: peter-evans/commit-comment@v2.0.1
