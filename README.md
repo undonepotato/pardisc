@@ -4,6 +4,5 @@ This is the repository for pardisc (lowercase), a Discord bot for the party game
 ## Things
 
 * Limit line length to 100 characters.
-* Automated unit tests will be difficult for a Discord bot, because you need to separate the logic from the command structure. Most likely, I'll post an issue and it'll be marked as nonessential.
 
 > Okay bye.
