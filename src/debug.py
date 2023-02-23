@@ -44,16 +44,12 @@ class DebugCommands(commands.Cog):
             elif where == "test_guild":
                 ctx.bot.tree.copy_global_to(guild=TEST_GUILD)
                 await ctx.send(f"Copied global commands to guild {TEST_GUILD.id}")
-                logging.info(
-                    "Successful manual sync to Discord (guild %s)", TEST_GUILD.id
-                )
+                logging.info("Successful manual sync to Discord (guild %s)", TEST_GUILD.id)
 
             elif where == "both":
                 await ctx.bot.tree.sync()
                 ctx.bot.tree.copy_global_to(guild=TEST_GUILD)
-                await ctx.send(
-                    f"Synced commands globally and copied to guild {TEST_GUILD.id}"
-                )
+                await ctx.send(f"Synced commands globally and copied to guild {TEST_GUILD.id}")
                 logging.info(
                     "Successful manual sync to Discord (global and guild %s)",
                     TEST_GUILD.id,
@@ -75,9 +71,7 @@ class DebugCommands(commands.Cog):
 
             if arg not in extensions:
                 if continue_on_invalid_name:
-                    await ctx.send(
-                        f"{arg} is not a valid extension name! Continuing..."
-                    )
+                    await ctx.send(f"{arg} is not a valid extension name! Continuing...")
                     continue
                 if not continue_on_invalid_name:
                     await ctx.send(f"{arg} is not a valid extension name! Stopping...")

@@ -4,6 +4,8 @@ Singletons, such as the bot ID, and setup functions, such as loading extensions.
 
 import os
 import logging
+from datetime import datetime
+
 import discord
 from dotenv import load_dotenv
 from rich.logging import RichHandler
@@ -43,15 +45,25 @@ MY_BOT_ID = int(os.getenv("BOT_ID"))
 
 extensions = ["debug", "admin", "help", "paranoia"]
 
+# Version information and changelogs
+BOT_VERSION = os.getenv("BOT_VERSION")
+CHANGELOG = os.getenv("CHANGELOG")
+START_TIME = None
+
 
 class Pardisc(commands.Bot):
     """
-    `commands.Bot`, except it loads extensions in `setup_hook`.
+    `commands.Bot`, except it loads extensions in `setup_hook`
+    and gets the start time in `on_ready`.
     """
 
     async def setup_hook(self) -> None:
         for extension in extensions:
             await self.load_extension(extension)
+
+    async def on_ready(self) -> None:
+        global START_TIME # pylint: disable=global-statement
+        START_TIME = datetime.now()
 
 
 bot = Pardisc(command_prefix="@@", intents=intents)

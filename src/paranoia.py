@@ -92,9 +92,7 @@ class Paranoia(commands.GroupCog):
             participant8,
         ]
 
-        participants = [
-            participant for participant in raw_participants if participant is not None
-        ]
+        participants = [participant for participant in raw_participants if participant is not None]
 
         calling_mode = text_calling_mode == "Yes"
         able_to_see = interaction.channel.members
@@ -199,9 +197,7 @@ class ParanoiaStartNextSegmentView(discord.ui.View):
         )
         button.disabled = True
         button.style = discord.ButtonStyle.gray
-        await interaction.followup.edit_message(
-            message_id=interaction.message.id, view=self
-        )
+        await interaction.followup.edit_message(message_id=interaction.message.id, view=self)
 
 
 class ParanoiaConfirmQuestionSentView(discord.ui.View):
@@ -274,16 +270,16 @@ class ParanoiaConfirmAnswerSentView(discord.ui.View):
             return await interaction.response.send_message(
                 "You're not the question responder!", ephemeral=True
             )
-        else:
-            button.disabled = True
-            button.style = discord.ButtonStyle.gray
-            await interaction.response.edit_message(view=self)
-            await interaction.followup.send(
-                "Now, flip the coin...",
-                view=ParanoiaStartCoinFlipView(
-                    self.participants, self.calling_mode, self.asker, self.askee
-                ),
-            )
+
+        button.disabled = True
+        button.style = discord.ButtonStyle.gray
+        await interaction.response.edit_message(view=self)
+        await interaction.followup.send(
+            "Now, flip the coin...",
+            view=ParanoiaStartCoinFlipView(
+                self.participants, self.calling_mode, self.asker, self.askee
+            ),
+        )
 
 
 class ParanoiaStartCoinFlipView(discord.ui.View):
@@ -395,9 +391,7 @@ class ParanoiaConfirmQuestionRevealedView(discord.ui.View):
                     ),
                 )
         else:
-            return await interaction.response.send_message(
-                "You're not the asker!", ephemeral=True
-            )
+            return await interaction.response.send_message("You're not the asker!", ephemeral=True)
 
 
 class ParanoiaConfirmQuestionNotRevealedView(discord.ui.View):
@@ -465,9 +459,7 @@ class ParanoiaRotateParticipantListAndStartNewGameView(discord.ui.View):
     2. Start a new game. Streamlined version of the `paranoia_start` command.
     """
 
-    def __init__(
-        self, participants: list, calling_mode: bool, askee: discord.Member
-    ) -> None:
+    def __init__(self, participants: list, calling_mode: bool, askee: discord.Member) -> None:
         self.participants = participants
         self.calling_mode = calling_mode
         self.askee = askee
@@ -486,9 +478,7 @@ class ParanoiaRotateParticipantListAndStartNewGameView(discord.ui.View):
             self.participants.insert(0, self.participants[-1])
             self.participants.pop(-1)
 
-            order_embed = discord.Embed(
-                title="Rotated Order", color=discord.Color.blurple()
-            )
+            order_embed = discord.Embed(title="Rotated Order", color=discord.Color.blurple())
             order_embed.description = (
                 f"""
             Here's the new order! If you don't like it, cry about it (or redo this command).
@@ -499,26 +489,10 @@ class ParanoiaRotateParticipantListAndStartNewGameView(discord.ui.View):
             3. <@{self.participants[2].id}>
             4. <@{self.participants[3].id}>
             """
-                + (
-                    f"5. <@{self.participants[4].id}>\n"
-                    if 4 < len(self.participants)
-                    else ""
-                )
-                + (
-                    f"6. <@{self.participants[5].id}>\n"
-                    if 5 < len(self.participants)
-                    else ""
-                )
-                + (
-                    f"7. <@{self.participants[6].id}>\n"
-                    if 6 < len(self.participants)
-                    else ""
-                )
-                + (
-                    f"8. <@{self.participants[7].id}>\n"
-                    if 7 < len(self.participants)
-                    else ""
-                )
+                + (f"5. <@{self.participants[4].id}>\n" if 4 < len(self.participants) else "")
+                + (f"6. <@{self.participants[5].id}>\n" if 5 < len(self.participants) else "")
+                + (f"7. <@{self.participants[6].id}>\n" if 6 < len(self.participants) else "")
+                + (f"8. <@{self.participants[7].id}>\n" if 7 < len(self.participants) else "")
             )
             await interaction.followup.send(
                 embed=order_embed,
